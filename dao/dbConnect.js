@@ -2,11 +2,11 @@
 const { Sequelize } = require("sequelize")
 
 // 创建数据库连接
-const sequelize = new Sequelize('my-blog', 'root', '123456', {
-    host: 'localhost',
-    dialect: 'mysql',
-    logging: false, // 不显示 sql语句
-})
+const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASS, {
+    host: process.env.DB_HOST,
+    dialect: "mysql",
+    logging: false
+});
 
 async function sync() {
     try {

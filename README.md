@@ -5,5 +5,7 @@ npm i -g express-generator
 express my-blog-node
 npm i
 npm i -g nodemon
-nodemon npm start 
+nodemon npm start
 ```
+
+> https://github.com/HuangGuangXian/mysite-express
