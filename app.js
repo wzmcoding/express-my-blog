@@ -11,6 +11,8 @@ const md5 = require('md5')
 
 // 默认读取项目根目录下的 .env 环境变量
 require('dotenv').config()
+// 处理异步错误
+require("express-async-errors");
 // 数据库连接
 require('./dao/db')
 // 引入路由
