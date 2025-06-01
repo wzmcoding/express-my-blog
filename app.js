@@ -18,6 +18,7 @@ require('./dao/db')
 // 引入路由
 const adminRouter = require('./routes/admin');
 const captchaRouter = require('./routes/captcha');
+const bannerRouter = require('./routes/banner');
 
 const app = express();
 
@@ -42,12 +43,14 @@ app.use(expressjwt({
   path: [
     {"url": "/api/admin/login", methods: ["POST"]},
     {"url": "/api/captcha", methods: ["GET"]},
+    {"url": "/api/banner", methods: ["GET"]},
   ]
 }));
 
 // 使用路由中间件
 app.use('/api/admin', adminRouter);
 app.use('/api', captchaRouter);
+app.use('/api/banner', bannerRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
