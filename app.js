@@ -19,6 +19,7 @@ require('./dao/db')
 const adminRouter = require('./routes/admin');
 const captchaRouter = require('./routes/captcha');
 const bannerRouter = require('./routes/banner');
+const uploadRouter = require('./routes/upload');
 
 const app = express();
 
@@ -51,6 +52,7 @@ app.use(expressjwt({
 app.use('/api/admin', adminRouter);
 app.use('/api', captchaRouter);
 app.use('/api/banner', bannerRouter);
+app.use('/api', uploadRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
