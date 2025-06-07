@@ -8,7 +8,7 @@ const {
 } = require("../utils/tool");
 const router = express.Router();
 
-router.post("/upload", async (req, res, next) => {
+router.post("/", async (req, res, next) => {
     // single 方法里面书写上传控件的 name 值
     uploading.single("file")(req, res, function (err) {
         if (err instanceof multer.MulterError) {

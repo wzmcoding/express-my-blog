@@ -23,6 +23,7 @@
     "multer": "^2.0.0",
     "mysql2": "^3.14.1",
     "sequelize": "^6.37.7",
-    "svg-captcha": "^1.4.0"
+    "svg-captcha": "^1.4.0",
+    "validate.js": "^0.13.1"
   }
 }
