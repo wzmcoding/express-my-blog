@@ -23,6 +23,7 @@ const uploadRouter = require('./routes/upload');
 const blogTypeRouter = require('./routes/blogType')
 const blogRouter = require('./routes/blog');
 const projectRouter = require('./routes/project');
+const messageRouter = require('./routes/message');
 
 const app = express();
 
@@ -52,6 +53,8 @@ app.use(expressjwt({
     {"url": "/api/blog", methods: ["GET"]},
     {"url": /\/api\/blog\/\d/, methods: ["GET"]},
     {"url": "/api/project", methods: ["GET"]},
+    {"url": "/api/message", methods: ["GET", "POST"]},
+    {"url": "/api/comment", methods: ["GET", "POST"]},
   ]
 }));
 
@@ -63,6 +66,8 @@ app.use('/api/upload', uploadRouter);
 app.use('/api/blogType', blogTypeRouter);
 app.use('/api/blog', blogRouter);
 app.use('/api/project', projectRouter);
+app.use('/api/message', messageRouter);
+app.use('/api/comment', messageRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
