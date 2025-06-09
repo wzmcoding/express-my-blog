@@ -6,6 +6,8 @@ const bannerModel = require("./model/bannerModel");
 const blogModel = require("./model/blogModel");
 const blogTypeModel = require("./model/blogTypeModel");
 const messageModel = require("./model/messageModel"); // 评论数据模型
+const aboutModel = require("./model/aboutModel"); // 关于我数据模型
+const settingModel = require("./model/settingModel"); // 全局设置数据模型
 
 const md5 = require("md5");
 
@@ -73,6 +75,34 @@ async function init() {
             }
         ]);
         console.log("初始化首页标语数据...");
+    }
+
+    // 初始化关于我Add commentMore actions
+    const aboutCount = await aboutModel.count();
+    if(!aboutCount) {
+        await aboutModel.create({
+            url: "https://github.com/wzmcoding"
+        });
+        console.log("初始化关于我数据...");
+    }
+
+    // 初始化全局设置
+    const settingCount = await settingModel.count();
+    if (!settingCount) {
+        await settingModel.create({
+            avatar: '/static/images/avatar.jpeg',
+            siteTitle: '我的个人空间',
+            github: '',
+            qq: '3263023350',
+            qqQrCode: '/static/images/zuotian9652.jpg',
+            weixin: 'yh777bao',
+            weixinQrCode: '/static/images/zuotian9652.jpg',
+            mail: 'duyi@gmail.com',
+            icp: '浙ICP备666666号',
+            githubName: 'DuYi-Edu',
+            favicon: 'http://mdrs.yuanjin.tech/Fs4CDlC6mwe_WXLMIiXcmSJLHO4f',
+        });
+        console.log("初始化全局设置数据...");
     }
 }
 init()

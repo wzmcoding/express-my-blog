@@ -24,6 +24,8 @@ const blogTypeRouter = require('./routes/blogType')
 const blogRouter = require('./routes/blog');
 const projectRouter = require('./routes/project');
 const messageRouter = require('./routes/message');
+const settingRouter = require('./routes/setting');
+const aboutRouter = require('./routes/about');
 
 const app = express();
 
@@ -55,6 +57,8 @@ app.use(expressjwt({
     {"url": "/api/project", methods: ["GET"]},
     {"url": "/api/message", methods: ["GET", "POST"]},
     {"url": "/api/comment", methods: ["GET", "POST"]},
+    {"url": "/api/setting", methods: ["GET"]},
+    {"url": "/api/about", methods: ["GET"]},
   ]
 }));
 
@@ -68,6 +72,8 @@ app.use('/api/blog', blogRouter);
 app.use('/api/project', projectRouter);
 app.use('/api/message', messageRouter);
 app.use('/api/comment', messageRouter);
+app.use('/api/setting', settingRouter);
+app.use('/api/about', aboutRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
