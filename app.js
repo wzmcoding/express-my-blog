@@ -47,7 +47,9 @@ app.use(expressjwt({
     {"url": "/api/admin/login", methods: ["POST"]},
     {"url": "/api/captcha", methods: ["GET"]},
     {"url": "/api/banner", methods: ["GET"]},
+    {"url": "/api/blogType", methods: ["GET"]},
     {"url": "/api/blog", methods: ["GET"]},
+    {"url": /\/api\/blog\/\d/, methods: ["GET"]},
   ]
 }));
 

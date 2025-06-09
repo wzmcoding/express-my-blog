@@ -3,7 +3,7 @@ const { validate } = require("validate.js");
 const blogTypeModel = require("../dao/model/blogTypeModel");
 const blogDao = require("../dao/blogDao");
 const blogTypeDao = require("../dao/blogTypeDao");
-const { formatResponse, handleDataPattern } = require("../utils/tool");
+const { formatResponse, handleDataPattern, handleTOC } = require("../utils/tool");
 
 // 扩展验证规则
 validate.validators.categoryIdIsExist = async function (value) {
@@ -16,7 +16,11 @@ validate.validators.categoryIdIsExist = async function (value) {
 
 // 添加博客
 module.exports.addBlogService = async function (blogInfo) {
-    blogInfo.toc = JSON.stringify('["a": "b"]');
+    // 处理TOC
+    // 经过 handleTOC 函数进行处理之后,现在 blogInfo 里面的 TOC 目录就是我们想要的格式
+    blogInfo = handleTOC(blogInfo);
+
+    blogInfo.toc = JSON.stringify(blogInfo.toc);
 
     // 初始化新文章的其他信息
     blogInfo.scanNumber = 0; // 阅读量初始化为0
@@ -105,4 +109,45 @@ module.exports.findBlogByPageService = async function (pageInfo) {
         total: data.count,
         rows
     });
+}
+
+// 根据id获取某篇博文
+module.exports.findBlogByIdService = async function (id, auth) {
+    const data = await blogDao.findBlogByIdDao(id);
+    // 重新处理 TOC ,还原成一个数组
+    data.dataValues.toc = JSON.parse(data.dataValues.toc);
+    // 根据auth是否有值来决定浏览数是否需要自增
+    if (!auth) {
+        data.scanNumber ++ ;
+        await data.save();
+    }
+    return formatResponse(undefined, undefined, data.dataValues);
+}
+
+// 修改博客
+module.exports.updateBlogService = async function (id, blogInfo) {
+    // 判断正文内容有没有改变,因为正文改变会影响 TOC
+    if(blogInfo.htmlContent) {
+        // 说明文章正文内容改变了,需要重新处理 TOC 目录
+        blogInfo = handleTOC(blogInfo);
+        blogInfo.toc = JSON.stringify(blogInfo.toc);
+    }
+    // 判断有没有 TOC, 如果有 TOC 需要做处理
+    const { dataValues } = await blogDao.updateBlogDao(id, blogInfo);
+    return formatResponse(undefined, undefined, dataValues);
+}
+
+// 删除一篇文章
+module.exports.deleteBlogService = async function (id) {
+    // 根据 id 查询到该篇文章的信息
+    const data = await blogDao.findBlogByIdDao(id);
+    // 根据文章对应的分类,将该分类下的文章数量自减
+    const categoryInfo = await blogTypeDao.findOneBlogTypeDao(data.dataValues.categoryId);
+    categoryInfo.articleCount --;
+    await categoryInfo.save();
+    // 对该文章下所对应的评论也一并删除
+
+    // 删除文章
+    await blogDao.deleteBlogDao(id);
+    return formatResponse(undefined, undefined, true);
 }

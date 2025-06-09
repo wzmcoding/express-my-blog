@@ -50,8 +50,8 @@ module.exports.findAllBlogTypeService = async () => {
 
 // 获取其中一个博客分类
 module.exports.findOneBlogTypeService = async (id) => {
-    const data = await blogTypeDao.findAllOneBlogTypeDao(id);
-    return formatResponse(undefined, undefined, data)
+    const { dataValues  } = await blogTypeDao.findOneBlogTypeDao(id);
+    return formatResponse(undefined, undefined, dataValues )
 };
 
 // 修改其中一个博客分类

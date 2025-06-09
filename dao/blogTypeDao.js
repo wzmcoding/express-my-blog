@@ -14,11 +14,8 @@ module.exports.findAllBlogTypeDao = async function () {
 }
 
 // 获取其中一个博客分类
-module.exports.findAllOneBlogTypeDao = async function (id) {
-    const {
-        dataValues
-    } = await blogTypeModel.findByPk(id);
-    return dataValues;
+module.exports.findOneBlogTypeDao = async function (id) {
+    return await blogTypeModel.findByPk(id);
 }
 
 // 修改博客分类
