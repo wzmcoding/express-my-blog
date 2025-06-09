@@ -5,6 +5,7 @@ const {
     validate
 } = require("validate.js");
 const blogTypeDao = require("../dao/blogTypeDao");
+const blogDao = require("../dao/blogDao");
 const {
     formatResponse,
     handleDataPattern
@@ -62,7 +63,8 @@ module.exports.updateBlogTypeService = async (id, newBlogTypeInfo) => {
 
 // 删除其中一个博客分类
 module.exports.deleteBlogTypeService = async (id) => {
+    const count = await blogDao.blogCountByBlogType(id);
     await blogTypeDao.deleteBlogTypeDao(id);
-    // 这里需要返回受影响的文章的数量，写了文章模块后再回来修改
-    return formatResponse(undefined, undefined, true);
+    // 这里需要返回受影响的文章的数量
+    return formatResponse(undefined, undefined, count);
 };

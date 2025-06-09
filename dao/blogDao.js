@@ -69,3 +69,12 @@ module.exports.deleteBlogDao = async function (id) {
         }
     });
 }
+
+// 统计对应该博客类型 id 的博文数量
+module.exports.blogCountByBlogType = async function (categoryId) {
+    return await blogModel.count({
+        where: {
+            categoryId
+        }
+    });
+}

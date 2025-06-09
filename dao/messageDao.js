@@ -53,12 +53,22 @@ module.exports.addMessageDao = async function (messageInfo) {
     return dataValues;
 }
 
+// 删除留言或者评论（传入的 id 是 message 表的 id）（主键）
 module.exports.deleteMessageDao = async function (id) {
     return await messageModel.destroy({
         where: {
             id
         }
     });
+}
+
+// 删除评论（传入的 id 是 message 表中的 blogId）
+module.exports.deleteMessageByBlogIdDao = async function(blogId){
+    return await messageModel.destroy({
+        where : {
+            blogId
+        }
+    })
 }
 
 module.exports.findOneMessageDao = async function (id) {

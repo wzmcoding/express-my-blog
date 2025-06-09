@@ -3,6 +3,7 @@ const { validate } = require("validate.js");
 const blogTypeModel = require("../dao/model/blogTypeModel");
 const blogDao = require("../dao/blogDao");
 const blogTypeDao = require("../dao/blogTypeDao");
+const messageDao = require("../dao/messageDao");
 const { formatResponse, handleDataPattern, handleTOC } = require("../utils/tool");
 
 // 扩展验证规则
@@ -132,6 +133,21 @@ module.exports.updateBlogService = async function (id, blogInfo) {
         blogInfo = handleTOC(blogInfo);
         blogInfo.toc = JSON.stringify(blogInfo.toc);
     }
+
+    // 这里涉及到一个问题，就是文章分类有没有修改，如果有修改，之前的文章分类对应的文章数量要自减
+    // 新的文章分类对应的文章数量要自增
+    const { dataValues: oldBlogInfo } = await blogDao.findBlogByIdDao(id);
+    if(blogInfo.categoryId !== oldBlogInfo.categoryId) {
+        // 如果进入此 if，说明修改了此文章的分类信息，那么修改前后的文章分类对应的文章数量都需要做出修改
+        const oldBlogType = await blogTypeDao.findOneBlogTypeDao(oldBlogInfo.categoryId);
+        oldBlogType.articleCount --;
+        await oldBlogType.save();
+
+        const newBlogType = await blogTypeDao.findOneBlogTypeDao(blogInfo.categoryId);
+        newBlogType.articleCount ++;
+        await newBlogType.save();
+    }
+
     // 判断有没有 TOC, 如果有 TOC 需要做处理
     const { dataValues } = await blogDao.updateBlogDao(id, blogInfo);
     return formatResponse(undefined, undefined, dataValues);
@@ -146,7 +162,7 @@ module.exports.deleteBlogService = async function (id) {
     categoryInfo.articleCount --;
     await categoryInfo.save();
     // 对该文章下所对应的评论也一并删除
-
+    await messageDao.deleteMessageByBlogIdDao(id);
     // 删除文章
     await blogDao.deleteBlogDao(id);
     return formatResponse(undefined, undefined, true);
