@@ -24,7 +24,7 @@ module.exports.addBlogTypeService = async (newBlogTypeInfo) => {
             presence: {
                 allowEmpty: false
             },
-            type: "string"
+            type: "number"
         }
     }
     // 进行数据验证
