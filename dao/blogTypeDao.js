@@ -34,10 +34,19 @@ module.exports.updateBlogType = async function (id, newBlogTypeInfo) {
     return dataValues;
 }
 
+// 删除博客分类
 module.exports.deleteBlogTypeDao = async function (id) {
     return await blogTypeModel.destroy({
         where: {
             id
         }
     });
+}
+
+// 根据id新增对应博客分类的文章数量
+module.exports.addBlogToType = async function (id) {
+    const data = await blogTypeModel.findByPk(id)
+    data.articleCount++
+    await data.save()
+    return true
 }

@@ -21,6 +21,7 @@ const captchaRouter = require('./routes/captcha');
 const bannerRouter = require('./routes/banner');
 const uploadRouter = require('./routes/upload');
 const blogTypeRouter = require('./routes/blogType')
+const blogRouter = require('./routes/blog');
 
 const app = express();
 
@@ -46,6 +47,7 @@ app.use(expressjwt({
     {"url": "/api/admin/login", methods: ["POST"]},
     {"url": "/api/captcha", methods: ["GET"]},
     {"url": "/api/banner", methods: ["GET"]},
+    {"url": "/api/blog", methods: ["GET"]},
   ]
 }));
 
@@ -55,6 +57,7 @@ app.use('/api', captchaRouter);
 app.use('/api/banner', bannerRouter);
 app.use('/api/upload', uploadRouter);
 app.use('/api/blogType', blogTypeRouter);
+app.use('/api/blog', blogRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
